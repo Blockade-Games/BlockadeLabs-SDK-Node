@@ -5,6 +5,21 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
+  "keywords": [
+    "skybox",
+    "artificial intelligence",
+    "stable diffusion",
+    "ai",
+    "sdk"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Blockade-Games/Skybox-SDK.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Blockade-Games/Skybox-SDK/issues"
+  },
+  "homepage": "https://github.com/Blockade-Games/Skybox-SDK/blob/main/README.md",
   "files": [
     "dist",
     "README.md"
