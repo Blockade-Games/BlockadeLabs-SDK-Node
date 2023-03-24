@@ -1,4 +1,7 @@
 {
+  "env": {
+    "node": true
+  },
   "extends": [
     "prettier",
     "eslint:recommended",
@@ -27,10 +30,7 @@
     "quotes": ["error", "single"],
     "no-duplicate-imports": "error",
     "no-console": "warn",
-    "no-unused-vars": [
-      "warn",
-      { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }
-    ],
+    "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
     "no-nested-ternary": "warn",
     "no-undef": "error"
   }
