@@ -1,3 +1,3 @@
-const message = 'Hello Skybox SDK';
+const message = 'Hello BlockadeLabs SDK';
 
 export { message };

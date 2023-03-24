@@ -1,12 +1,12 @@
 {
-  "name": "skybox-sdk",
-  "description": "Skybox SDK",
+  "name": "@blockadelabs/sdk",
+  "description": "BlockadeLabs SDK",
   "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
   "keywords": [
-    "skybox",
+    "blockadelabs",
     "artificial intelligence",
     "stable diffusion",
     "ai",
@@ -14,12 +14,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Blockade-Games/Skybox-SDK.git"
+    "url": "git+https://github.com/Blockade-Games/BlockadeLabs-SDK-Node.git"
   },
   "bugs": {
-    "url": "https://github.com/Blockade-Games/Skybox-SDK/issues"
+    "url": "https://github.com/Blockade-Games/BlockadeLabs-SDK-Node/issues"
   },
-  "homepage": "https://github.com/Blockade-Games/Skybox-SDK/blob/main/README.md",
+  "homepage": "https://github.com/Blockade-Games/BlockadeLabs-SDK-Node/blob/main/README.md",
   "files": [
     "dist",
     "README.md"
