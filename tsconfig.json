@@ -6,6 +6,7 @@
     "paths": {
       "@/*": ["*"]
     },
+    "noUncheckedIndexedAccess": true,
     "composite": false,
     "declaration": true,
     "declarationMap": true,
