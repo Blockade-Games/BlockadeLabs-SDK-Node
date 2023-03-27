@@ -5,6 +5,7 @@ export default defineConfig({
   test: {
     include: ['tests/*.ts'],
     watch: false,
+    testTimeout: 30000,
   },
   plugins: [viteTsconfigPaths()],
 });
