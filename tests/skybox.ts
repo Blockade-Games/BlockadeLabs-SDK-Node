@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { BlockadeLabsSdk } from '@/index';
 import { env } from './utils';
 
-describe('Skybox Suite', () => {
+describe.concurrent('Skybox Suite', () => {
   it('Should retrieve Skybox Styles', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
@@ -25,8 +25,6 @@ describe('Skybox Suite', () => {
 
     expect(
       (() => {
-        if ('message' in skybox || !('id' in skybox)) return false;
-
         if (skybox.error_message) return false;
 
         if (skybox.skybox_style_id !== 2) return false;
