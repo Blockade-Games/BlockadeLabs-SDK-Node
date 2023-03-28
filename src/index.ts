@@ -5,6 +5,11 @@ import FormData from 'form-data';
 import { prodApi, stagingApi } from '@/services/api';
 import { getSkyboxStylesResponse, generateSkyboxRequest, generateSkyboxResponse } from '@/schemas/skybox';
 import {
+  cancelAllPendingImaginesResponse,
+  cancelImagineRequest,
+  cancelImagineResponse,
+  deleteImagineRequest,
+  deleteImagineResponse,
   generateImagineRequest,
   generateImagineResponse,
   getGeneratorsResponse,
@@ -73,6 +78,10 @@ export class BlockadeLabsSdk {
         headers: { 'Content-Type': 'multipart/form-data', 'Content-Length': `${formData.getLengthSync()}` },
       });
 
+      if (data.error) {
+        throw new InternalError(`${data.error}`);
+      }
+
       const responseValidator = generateSkyboxResponse.safeParse(data);
 
       if (responseValidator.success === false) {
@@ -138,6 +147,10 @@ export class BlockadeLabsSdk {
         headers: { 'Content-Type': 'multipart/form-data', 'Content-Length': `${formData.getLengthSync()}` },
       });
 
+      if (data.error) {
+        throw new InternalError(`${data.error}`);
+      }
+
       const responseValidator = generateImagineResponse.safeParse(data);
 
       if (responseValidator.success === false) {
@@ -162,7 +175,11 @@ export class BlockadeLabsSdk {
 
       const { id } = requestValidator.data;
 
-      const { data } = await this.api.get(`imagine/requests/${id}?api_key=${this.api_key}`);
+      const { data } = await this.api.get(`/imagine/requests/${id}?api_key=${this.api_key}`);
+
+      if (data.error) {
+        throw new InternalError(`${data.error}`);
+      }
 
       const responseValidator = getImagineByIdResponse.safeParse(data);
 
@@ -190,7 +207,11 @@ export class BlockadeLabsSdk {
 
       const { obfuscated_id } = requestValidator.data;
 
-      const { data } = await this.api.get(`imagine/requests/obfuscated-id/${obfuscated_id}?api_key=${this.api_key}`);
+      const { data } = await this.api.get(`/imagine/requests/obfuscated-id/${obfuscated_id}?api_key=${this.api_key}`);
+
+      if (data.error) {
+        throw new InternalError(`${data.error}`);
+      }
 
       const responseValidator = getImagineByObfuscatedIdResponse.safeParse(data);
 
@@ -224,15 +245,93 @@ export class BlockadeLabsSdk {
             searchParams.append(key, String(value));
           });
 
-          return `imagine/myRequests?api_key=${this.api_key}&${searchParams.toString()}`;
+          return `/imagine/myRequests?api_key=${this.api_key}&${searchParams.toString()}`;
         }
 
-        return `imagine/myRequests?api_key=${this.api_key}`;
+        return `/imagine/myRequests?api_key=${this.api_key}`;
       })();
 
       const { data } = await this.api.get(url);
 
       const responseValidator = getImagineHistoryResponse.safeParse(data);
+
+      if (responseValidator.success === false) {
+        throw new InternalError(responseValidator.error.message);
+      }
+
+      return responseValidator.data;
+    } catch (err) {
+      if (err instanceof InternalError) throw new InternalError(err.message);
+
+      throw new InternalError('Unexpected error retrieving imagine history');
+    }
+  }
+
+  async cancelImagine(input: z.infer<typeof cancelImagineRequest>): Promise<z.infer<typeof cancelImagineResponse>> {
+    try {
+      const requestValidator = cancelImagineRequest.safeParse(input);
+
+      if (requestValidator.success === false) {
+        throw new InternalError(requestValidator.error.message);
+      }
+
+      const { id } = requestValidator.data;
+
+      const { data } = await this.api.delete(`/imagine/requests/${id}?api_key=${this.api_key}`);
+
+      if (data.error) {
+        throw new InternalError(`${data.error}`);
+      }
+
+      const responseValidator = cancelImagineResponse.safeParse(data);
+
+      if (responseValidator.success === false) {
+        throw new InternalError(responseValidator.error.message);
+      }
+
+      return responseValidator.data;
+    } catch (err) {
+      if (err instanceof InternalError) throw new InternalError(err.message);
+
+      throw new InternalError('Unexpected error retrieving imagine history');
+    }
+  }
+
+  async cancelAllPendingImagines(): Promise<z.infer<typeof cancelAllPendingImaginesResponse>> {
+    try {
+      const { data } = await this.api.delete(`/imagine/requests/pending?api_key=${this.api_key}`);
+
+      const responseValidator = cancelAllPendingImaginesResponse.safeParse(data);
+
+      if (responseValidator.success === false) {
+        throw new InternalError(responseValidator.error.message);
+      }
+
+      return responseValidator.data;
+    } catch (err) {
+      if (err instanceof InternalError) throw new InternalError(err.message);
+
+      throw new InternalError('Unexpected error retrieving imagine history');
+    }
+  }
+
+  async deleteImagine(input: z.infer<typeof deleteImagineRequest>): Promise<z.infer<typeof deleteImagineResponse>> {
+    try {
+      const requestValidator = deleteImagineRequest.safeParse(input);
+
+      if (requestValidator.success === false) {
+        throw new InternalError(requestValidator.error.message);
+      }
+
+      const { id } = requestValidator.data;
+
+      const { data } = await this.api.delete(`/imagine/deleteImagine/${id}?api_key=${this.api_key}`);
+
+      if (data.error) {
+        throw new InternalError(`${data.error}`);
+      }
+
+      const responseValidator = deleteImagineResponse.safeParse(data);
 
       if (responseValidator.success === false) {
         throw new InternalError(responseValidator.error.message);
