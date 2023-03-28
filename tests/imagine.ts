@@ -249,19 +249,18 @@ describe('Imagine Suite', () => {
     expect(imagineHistory.data[0]?.title === imagine.request.title).toBe(true);
   });
 
-  // TODO: investigate why is not filtering by Prompt
-  // it.concurrent('Should create an new imagine and find him on imagine history by Prompt', async () => {
-  //   const sdk = new BlockadeLabsSdk({
-  //     api_key: env.api_key,
-  //   });
+  it.concurrent('Should create an new imagine and find him on imagine history by Prompt', async () => {
+    const sdk = new BlockadeLabsSdk({
+      api_key: env.api_key,
+    });
 
-  //   const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'Dog with a Sword' } });
+    const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'prompt filter' } });
 
-  //   const imagineHistory = await sdk.getImagineHistory({ query: imagine.request.generator_data.prompt });
+    const imagineHistory = await sdk.getImagineHistory({ query: 'prompt filter' });
 
-  //   expect(imagineHistory.totalCount >= 1).toBe(true);
-  //   expect(imagineHistory.data[0]?.generator_data.prompt === imagine.request.generator_data.prompt).toBe(true);
-  // });
+    expect(imagineHistory.totalCount >= 1).toBe(true);
+    expect(imagineHistory.data[0]?.generator_data.prompt === imagine.request.generator_data.prompt).toBe(true);
+  });
 
   it.concurrent('Should create an new imagine and cancel him', async () => {
     const sdk = new BlockadeLabsSdk({
