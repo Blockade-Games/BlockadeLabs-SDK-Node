@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { BlockadeLabsSdk } from '@/index';
 import { delay, env, readFileAsBuffer } from './utils';
 
-describe.concurrent('Imagine Suite', () => {
-  it('Should retrieve Generators', async () => {
+describe('Imagine Suite', () => {
+  it.concurrent('Should retrieve Generators', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
     });
@@ -13,7 +13,7 @@ describe.concurrent('Imagine Suite', () => {
     expect(Array.isArray(styles)).toBe(true);
   });
 
-  it('Should create an new imagine', async () => {
+  it.concurrent('Should create an new imagine', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
     });
@@ -31,7 +31,7 @@ describe.concurrent('Imagine Suite', () => {
     ).toBe(true);
   });
 
-  it('Should create an new imagine with an Buffer as init_image', async () => {
+  it.concurrent('Should create an new imagine with an Buffer as init_image', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
     });
@@ -54,7 +54,7 @@ describe.concurrent('Imagine Suite', () => {
     ).toBe(true);
   });
 
-  it('Should create an new imagine and get him by ID', async () => {
+  it.concurrent('Should create an new imagine and get him by ID', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
     });
@@ -76,7 +76,7 @@ describe.concurrent('Imagine Suite', () => {
     ).toBe(true);
   });
 
-  it('Should create an new imagine and get him by Obfuscated ID', async () => {
+  it.concurrent('Should create an new imagine and get him by Obfuscated ID', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
     });
@@ -98,7 +98,7 @@ describe.concurrent('Imagine Suite', () => {
     ).toBe(true);
   });
 
-  it('Should retrieve Imagine History', async () => {
+  it.concurrent('Should retrieve Imagine History', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
     });
@@ -109,7 +109,7 @@ describe.concurrent('Imagine Suite', () => {
     expect(imagineHistory.totalCount >= 0).toBe(true);
   });
 
-  it('Should retrieve Imagine History with limit 1', async () => {
+  it.concurrent('Should retrieve Imagine History with limit 1', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
     });
@@ -121,7 +121,7 @@ describe.concurrent('Imagine Suite', () => {
     expect(imagineHistory.totalCount <= 1).toBe(true);
   });
 
-  it('Should retrieve Imagine History without the first imagine', async () => {
+  it.concurrent('Should retrieve Imagine History without the first imagine', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
     });
@@ -145,7 +145,7 @@ describe.concurrent('Imagine Suite', () => {
     ).toBe(true);
   });
 
-  it('Should get only completed imagines in history', async () => {
+  it.concurrent('Should get only completed imagines in history', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
     });
@@ -165,7 +165,7 @@ describe.concurrent('Imagine Suite', () => {
     ).toBe(true);
   });
 
-  it('Should get imagine history in ASC and DESC order', async () => {
+  it.concurrent('Should get imagine history in ASC and DESC order', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
     });
@@ -202,7 +202,7 @@ describe.concurrent('Imagine Suite', () => {
     ).toBe(true);
   });
 
-  it('Should get only imagines with generator stable-skybox in history', async () => {
+  it.concurrent('Should get only imagines with generator stable-skybox in history', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
     });
@@ -222,7 +222,7 @@ describe.concurrent('Imagine Suite', () => {
     ).toBe(true);
   });
 
-  it('Should create an new imagine and find him on imagine history by ID', async () => {
+  it.concurrent('Should create an new imagine and find him on imagine history by ID', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
     });
@@ -235,7 +235,7 @@ describe.concurrent('Imagine Suite', () => {
     expect(imagineHistory.data[0]?.id === imagine.request.id).toBe(true);
   });
 
-  it('Should create an new imagine and find him on imagine history by Title', async () => {
+  it.concurrent('Should create an new imagine and find him on imagine history by Title', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
     });
@@ -250,7 +250,7 @@ describe.concurrent('Imagine Suite', () => {
   });
 
   // TODO: investigate why is not filtering by Prompt
-  // it('Should create an new imagine and find him on imagine history by Prompt', async () => {
+  // it.concurrent('Should create an new imagine and find him on imagine history by Prompt', async () => {
   //   const sdk = new BlockadeLabsSdk({
   //     api_key: env.api_key,
   //   });
@@ -263,7 +263,7 @@ describe.concurrent('Imagine Suite', () => {
   //   expect(imagineHistory.data[0]?.generator_data.prompt === imagine.request.generator_data.prompt).toBe(true);
   // });
 
-  it('Should create an new imagine and cancel him', async () => {
+  it.concurrent('Should create an new imagine and cancel him', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
     });
@@ -279,6 +279,32 @@ describe.concurrent('Imagine Suite', () => {
 
     expect(cancelRequest.success).toBe(true);
     expect(imagine.request.status === 'abort').toBe(true);
+  });
+
+  // NOTE: the tests below should not be executed concurrent since they can affect the other ones
+  it('Should create imagine requests and cancel all', async () => {
+    const sdk = new BlockadeLabsSdk({
+      api_key: env.api_key,
+    });
+
+    const firstGenerateImagine = await sdk.generateImagine({
+      generator: 'stable',
+      generator_data: { prompt: 'Dog with a Sword' },
+    });
+
+    const secondGenerateImagine = await sdk.generateImagine({
+      generator: 'stable',
+      generator_data: { prompt: 'Cat with a Sword' },
+    });
+
+    const cancelAllRequest = await sdk.cancelAllPendingImagines();
+
+    const firstImagine = await sdk.getImagineById({ id: firstGenerateImagine.request.id });
+    const secondImagine = await sdk.getImagineById({ id: secondGenerateImagine.request.id });
+
+    expect(cancelAllRequest.success).toBe(true);
+    expect(firstImagine.request.status === 'abort').toBe(true);
+    expect(secondImagine.request.status === 'abort').toBe(true);
   });
 
   it('Should create an new imagine and delete him', async () => {
