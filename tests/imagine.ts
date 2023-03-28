@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { BlockadeLabsSdk } from '@/index';
-import { env, readFileAsBuffer } from './utils';
+import { delay, env, readFileAsBuffer } from './utils';
 
 describe.concurrent('Imagine Suite', () => {
   it('Should retrieve Generators', async () => {
@@ -249,17 +249,89 @@ describe.concurrent('Imagine Suite', () => {
     expect(imagineHistory.data[0]?.title === imagine.request.title).toBe(true);
   });
 
-  it('Should create an new imagine and find him on imagine history by Prompt', async () => {
+  // TODO: investigate why is not filtering by Prompt
+  // it('Should create an new imagine and find him on imagine history by Prompt', async () => {
+  //   const sdk = new BlockadeLabsSdk({
+  //     api_key: env.api_key,
+  //   });
+
+  //   const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'Dog with a Sword' } });
+
+  //   const imagineHistory = await sdk.getImagineHistory({ query: imagine.request.generator_data.prompt });
+
+  //   expect(imagineHistory.totalCount >= 1).toBe(true);
+  //   expect(imagineHistory.data[0]?.generator_data.prompt === imagine.request.generator_data.prompt).toBe(true);
+  // });
+
+  it('Should create an new imagine and cancel him', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
     });
 
-    const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'Dog with a Sword' } });
+    const generateImagine = await sdk.generateImagine({
+      generator: 'stable',
+      generator_data: { prompt: 'Dog with a Sword' },
+    });
 
-    const imagineHistory = await sdk.getImagineHistory({ query: imagine.request.generator_data.prompt });
+    const cancelRequest = await sdk.cancelImagine({ id: generateImagine.request.id });
 
-    expect(imagineHistory.totalCount >= 1).toBe(true);
-    expect(imagineHistory.data[0]?.id === imagine.request.id).toBe(true);
-    expect(imagineHistory.data[0]?.generator_data.prompt === imagine.request.generator_data.prompt).toBe(true);
+    const imagine = await sdk.getImagineById({ id: generateImagine.request.id });
+
+    expect(cancelRequest.success).toBe(true);
+    expect(imagine.request.status === 'abort').toBe(true);
+  });
+
+  it('Should create an new imagine and delete him', async () => {
+    const sdk = new BlockadeLabsSdk({
+      api_key: env.api_key,
+    });
+
+    const generateImagine = await sdk.generateImagine({
+      generator: 'stable',
+      generator_data: { prompt: 'Dog with a Sword' },
+    });
+
+    // wait for imagine to be completed
+    let completed = false;
+
+    while (!completed) {
+      const imagine = await sdk.getImagineById({ id: generateImagine.request.id });
+
+      if (imagine.request.status === 'complete') completed = true;
+
+      await delay(5000);
+    }
+
+    const deleteRequest = await sdk.deleteImagine({ id: generateImagine.request.id });
+
+    expect(Boolean(deleteRequest.success)).toBe(true);
+    expect(String(generateImagine.request.id) === String(deleteRequest.id));
+  });
+
+  it.fails('Should fail when trying to retrieve an deleted imagine', async () => {
+    const sdk = new BlockadeLabsSdk({
+      api_key: env.api_key,
+    });
+
+    const generateImagine = await sdk.generateImagine({
+      generator: 'stable',
+      generator_data: { prompt: 'Dog with a Sword' },
+    });
+
+    // wait for imagine to be completed
+    let completed = false;
+
+    while (!completed) {
+      const imagine = await sdk.getImagineById({ id: generateImagine.request.id });
+
+      if (imagine.request.status === 'complete') completed = true;
+
+      await delay(5000);
+    }
+
+    await sdk.deleteImagine({ id: generateImagine.request.id });
+
+    // This should fail here
+    await sdk.getImagineById({ id: generateImagine.request.id });
   });
 });

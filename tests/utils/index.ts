@@ -18,3 +18,7 @@ export const readFileAsBuffer = (filePath: string): Promise<Buffer> => {
     });
   });
 };
+
+export const delay = (ms: number) => {
+  return new Promise((res) => setTimeout(res, ms));
+};
