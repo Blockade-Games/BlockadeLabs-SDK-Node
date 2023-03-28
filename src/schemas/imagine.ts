@@ -160,7 +160,7 @@ export const cancelImagineRequest = z.object({
 
 export const cancelImagineResponse = z.object({ success: z.boolean() });
 
-export const cancelAllPedingImagginesResponse = z.object({ success: z.boolean() });
+export const cancelAllPendingImaginesResponse = z.object({ success: z.boolean() });
 
 export const deleteImagineRequest = z.object({
   id: z.string().or(z.number()),
