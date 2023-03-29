@@ -29,7 +29,10 @@
     "build": "tsup",
     "test": "vitest",
     "lint": "eslint src",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "yarn build && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
