@@ -92,7 +92,8 @@ const generation = await sdk.generateImagine({
 });
 
 /* 
-    generateImagine method can accept different types of generator_data, which may include files. In this case, we've multiple ways of passing these files to the method, which can change depending on your environment.
+    The generateImagine method can accept different types of generator_data, which may include files. 
+    In this case, we've multiple ways of passing these files to the method, which can change depending on your environment.
 
     # Node Environment
 
