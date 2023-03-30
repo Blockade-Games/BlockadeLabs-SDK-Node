@@ -92,17 +92,17 @@ const generation = await sdk.generateImagine({
 });
 
 /* 
-    The generateImagine method can accept different types of generator_data, which may include files.
-    In this case, we've multiple ways of passing these files to the method.
-    And this can change depending on your environment.
+  The generateImagine method can accept different types of generator_data, which may include files.
+  In this case, we've multiple ways of passing these files to the method.
+  And this can change depending on your environment.
 
-    # Node Environment
+  # Node Environment
 
-    In Node, you can pass these params as a string URL, as a Buffer, or as a Uint8Array
+  In Node, you can pass these params as a string URL, as a Buffer, or as a Uint8Array
 
-    # Browser Environment
+  # Browser Environment
 
-    In a browser environment, you can pass these params as a string URL, as a Blob, or as a Uint8Array
+  In a browser environment, you can pass these params as a string URL, as a Blob, or as a Uint8Array
 */
 
 // init_image param node environment example
