@@ -27,8 +27,6 @@ const sdk = BlockadeLabsSdk({
 });
 
 const generators = await sdk.getGenerators();
-
-console.log(generators);
 ```
 
 ## Methods Doc
@@ -156,8 +154,6 @@ function Component() {
       },
     });
 
-    console.log(generation);
-
     return generation;
   }, []);
 
@@ -261,7 +257,7 @@ const generateImagine = await sdk.generateImagine({
   generator_data: { prompt: 'PROMPT_GOES_HERE' },
 });
 
-const cancelRequest = await sdk.cancelImagine({
+await sdk.cancelImagine({
   id: generateImagine.request.id, // REQUIRED
 });
 ```
