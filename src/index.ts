@@ -154,6 +154,11 @@ export class BlockadeLabsSdk {
           return;
         }
 
+        if (typeof window !== 'undefined' && value instanceof Blob) {
+          formData.append(key, value, key);
+          return;
+        }
+
         formData.append(key, value);
       });
 
