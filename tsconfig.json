@@ -6,6 +6,7 @@
     "paths": {
       "@/*": ["*"]
     },
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "noUncheckedIndexedAccess": true,
     "composite": false,
     "declaration": true,

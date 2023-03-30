@@ -19,6 +19,19 @@ export const readFileAsBuffer = (filePath: string): Promise<Buffer> => {
   });
 };
 
+export const readImageAsUint8Array = (filePath: string): Promise<Uint8Array> => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        const uint8Array = new Uint8Array(data.buffer);
+        resolve(uint8Array);
+      }
+    });
+  });
+};
+
 export const delay = (ms: number) => {
   return new Promise((res) => setTimeout(res, ms));
 };

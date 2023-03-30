@@ -1,6 +1,7 @@
 import { AxiosInstance } from 'axios';
 import { z } from 'zod';
 import FormData from 'form-data';
+import { Buffer } from 'buffer';
 
 import { prodApi, stagingApi } from '@/services/api';
 import { getSkyboxStylesResponse, generateSkyboxRequest, generateSkyboxResponse } from '@/schemas/skybox';
@@ -75,7 +76,7 @@ export class BlockadeLabsSdk {
       }
 
       const { data } = await this.api.post('/skybox', formData, {
-        headers: { 'Content-Type': 'multipart/form-data', 'Content-Length': `${formData.getLengthSync()}` },
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
 
       if (data.error) {
@@ -136,15 +137,19 @@ export class BlockadeLabsSdk {
       }
 
       Object.entries(generator_data).map(([key, value]) => {
-        if (value instanceof Buffer) {
+        if (typeof Buffer !== 'undefined' && Buffer.isBuffer(value)) {
           formData.append(key, value, { filename: key, contentType: 'application/octet-stream' });
+        } else if (value instanceof Uint8Array) {
+          const buffer = Buffer.from(value);
+
+          formData.append(key, buffer, { filename: key, contentType: 'application/octet-stream' });
         } else {
           formData.append(key, value);
         }
       });
 
       const { data } = await this.api.post('/imagine/requests', formData, {
-        headers: { 'Content-Type': 'multipart/form-data', 'Content-Length': `${formData.getLengthSync()}` },
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
 
       if (data.error) {

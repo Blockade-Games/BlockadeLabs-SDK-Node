@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { BlockadeLabsSdk } from '@/index';
-import { delay, env, readFileAsBuffer } from './utils';
+import { delay, env, readFileAsBuffer, readImageAsUint8Array } from './utils';
 
 describe('Imagine Suite', () => {
   it.concurrent('Should retrieve Generators', async () => {
@@ -41,6 +41,29 @@ describe('Imagine Suite', () => {
     const imagine = await sdk.generateImagine({
       generator: 'stable',
       generator_data: { prompt: 'Cat with a Sword', init_image: buffer },
+    });
+
+    expect(
+      (() => {
+        if (!imagine.request.id) return false;
+
+        if (imagine.request.error_message) return false;
+
+        return true;
+      })(),
+    ).toBe(true);
+  });
+
+  it.concurrent('Should create an new imagine with an Uint8Array as init_image', async () => {
+    const sdk = new BlockadeLabsSdk({
+      api_key: env.api_key,
+    });
+
+    const binary = await readImageAsUint8Array('./mocks/thumb_cat_sword.png');
+
+    const imagine = await sdk.generateImagine({
+      generator: 'stable',
+      generator_data: { prompt: 'Cat with a Sword', init_image: binary },
     });
 
     expect(
