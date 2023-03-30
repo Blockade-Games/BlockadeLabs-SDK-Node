@@ -23,10 +23,9 @@ $ npm i @blockadelabs/sdk
 import { BlockadeLabsSdk } from '@blockadelabs/sdk';
 
 const sdk = BlockadeLabsSdk({
-  api_key: YOUR_API_KEY,
+  api_key: YOUR_API_KEY, // REQUIRED
+  env: 'staging', // Optional, 'production' | 'staging'
 });
-
-const generators = await sdk.getGenerators();
 ```
 
 ## Methods Doc
