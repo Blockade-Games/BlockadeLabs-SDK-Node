@@ -195,7 +195,7 @@ const imagine = await sdk.generateImagine({
 });
 
 const imagineResult = await sdk.getImagineById({
-  id: imagine.request.id, // REQUIRED
+  id: imagine.id, // REQUIRED
 });
 ```
 
@@ -216,7 +216,7 @@ const imagine = await sdk.generateImagine({
 });
 
 const imagineResult = await sdk.getImagineByObfuscatedId({
-  obfuscated_id: imagine.request.obfuscated_id, // REQUIRED
+  obfuscated_id: imagine.obfuscated_id, // REQUIRED
 });
 ```
 
@@ -257,7 +257,7 @@ const generateImagine = await sdk.generateImagine({
 });
 
 await sdk.cancelImagine({
-  id: generateImagine.request.id, // REQUIRED
+  id: generateImagine.id, // REQUIRED
 });
 ```
 

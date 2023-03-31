@@ -21,28 +21,26 @@ export const generateImagineRequest = z.object({
 });
 
 export const generateImagineResponse = z.object({
-  request: z.object({
-    id: z.number(),
-    status: z.string(),
-    queue_position: z.number(),
-    file_url: z.string(),
-    thumb_url: z.string(),
-    title: z.string(),
-    user_id: z.number(),
-    username: z.string(),
-    // TODO: find this type here
-    error_message: z.null().or(z.any()),
-    obfuscated_id: z.string(),
-    pusher_channel: z.string(),
-    pusher_event: z.string(),
-    created_at: z.string().or(z.date()),
-    updated_at: z.string().or(z.date()),
-    type: z.string(),
-    generator: z.string(),
-    // NOTE: generators params can be changed all the time, so I'm leaving they as any here.
-    // You can see all the generators params for each generator calling getGenerators.
-    generator_data: z.record(z.string(), z.any()),
-  }),
+  id: z.number(),
+  status: z.string(),
+  queue_position: z.number(),
+  file_url: z.string(),
+  thumb_url: z.string(),
+  title: z.string(),
+  user_id: z.number(),
+  username: z.string(),
+  // TODO: find this type here
+  error_message: z.null().or(z.any()),
+  obfuscated_id: z.string(),
+  pusher_channel: z.string(),
+  pusher_event: z.string(),
+  created_at: z.string().or(z.date()),
+  updated_at: z.string().or(z.date()),
+  type: z.string(),
+  generator: z.string(),
+  // NOTE: generators params can be changed all the time, so I'm leaving they as any here.
+  // You can see all the generators params for each generator calling getGenerators.
+  generator_data: z.record(z.string(), z.any()),
 });
 
 export const getImagineByIdRequest = z.object({
@@ -50,31 +48,29 @@ export const getImagineByIdRequest = z.object({
 });
 
 export const getImagineByIdResponse = z.object({
-  request: z.object({
-    id: z.number(),
-    status: z.string(),
-    queue_position: z.number(),
-    file_url: z.string(),
-    thumb_url: z.string(),
-    title: z.string(),
-    user_id: z.number(),
-    username: z.string(),
-    // TODO: find this type here
-    error_message: z.null().or(z.any()),
-    obfuscated_id: z.string(),
-    pusher_channel: z.string(),
-    pusher_event: z.string(),
-    created_at: z.string().or(z.date()),
-    updated_at: z.string().or(z.date()),
-    dispatched_at: z.string().or(z.date()),
-    processing_at: z.string().or(z.date()),
-    completed_at: z.string().or(z.date()),
-    type: z.string(),
-    generator: z.string(),
-    // NOTE: generators params can be changed all the time, so I'm leaving they as any here.
-    // You can see all the generators params for each generator calling getGenerators.
-    generator_data: z.record(z.string(), z.any()),
-  }),
+  id: z.number(),
+  status: z.string(),
+  queue_position: z.number(),
+  file_url: z.string(),
+  thumb_url: z.string(),
+  title: z.string(),
+  user_id: z.number(),
+  username: z.string(),
+  // TODO: find this type here
+  error_message: z.null().or(z.any()),
+  obfuscated_id: z.string(),
+  pusher_channel: z.string(),
+  pusher_event: z.string(),
+  created_at: z.string().or(z.date()),
+  updated_at: z.string().or(z.date()),
+  dispatched_at: z.string().or(z.date()),
+  processing_at: z.string().or(z.date()),
+  completed_at: z.string().or(z.date()),
+  type: z.string(),
+  generator: z.string(),
+  // NOTE: generators params can be changed all the time, so I'm leaving they as any here.
+  // You can see all the generators params for each generator calling getGenerators.
+  generator_data: z.record(z.string(), z.any()),
 });
 
 export const getImagineByObfuscatedIdRequest = z.object({
@@ -82,31 +78,29 @@ export const getImagineByObfuscatedIdRequest = z.object({
 });
 
 export const getImagineByObfuscatedIdResponse = z.object({
-  request: z.object({
-    id: z.number(),
-    status: z.string(),
-    queue_position: z.number(),
-    file_url: z.string(),
-    thumb_url: z.string(),
-    title: z.string(),
-    user_id: z.number(),
-    username: z.string(),
-    // TODO: find this type here
-    error_message: z.null().or(z.any()),
-    obfuscated_id: z.string(),
-    pusher_channel: z.string(),
-    pusher_event: z.string(),
-    created_at: z.string().or(z.date()),
-    updated_at: z.string().or(z.date()),
-    dispatched_at: z.string().or(z.date()),
-    processing_at: z.string().or(z.date()),
-    completed_at: z.string().or(z.date()),
-    type: z.string(),
-    generator: z.string(),
-    // NOTE: generators params can be changed all the time, so I'm leaving they as any here.
-    // You can see all the generators params for each generator calling getGenerators.
-    generator_data: z.record(z.string(), z.any()),
-  }),
+  id: z.number(),
+  status: z.string(),
+  queue_position: z.number(),
+  file_url: z.string(),
+  thumb_url: z.string(),
+  title: z.string(),
+  user_id: z.number(),
+  username: z.string(),
+  // TODO: find this type here
+  error_message: z.null().or(z.any()),
+  obfuscated_id: z.string(),
+  pusher_channel: z.string(),
+  pusher_event: z.string(),
+  created_at: z.string().or(z.date()),
+  updated_at: z.string().or(z.date()),
+  dispatched_at: z.string().or(z.date()),
+  processing_at: z.string().or(z.date()),
+  completed_at: z.string().or(z.date()),
+  type: z.string(),
+  generator: z.string(),
+  // NOTE: generators params can be changed all the time, so I'm leaving they as any here.
+  // You can see all the generators params for each generator calling getGenerators.
+  generator_data: z.record(z.string(), z.any()),
 });
 
 export const getImagineHistoryRequest = z

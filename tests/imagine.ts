@@ -22,9 +22,9 @@ describe('Imagine Suite', () => {
 
     expect(
       (() => {
-        if (!imagine.request.id) return false;
+        if (!imagine.id) return false;
 
-        if (imagine.request.error_message) return false;
+        if (imagine.error_message) return false;
 
         return true;
       })(),
@@ -45,9 +45,9 @@ describe('Imagine Suite', () => {
 
     expect(
       (() => {
-        if (!imagine.request.id) return false;
+        if (!imagine.id) return false;
 
-        if (imagine.request.error_message) return false;
+        if (imagine.error_message) return false;
 
         return true;
       })(),
@@ -68,9 +68,9 @@ describe('Imagine Suite', () => {
 
     expect(
       (() => {
-        if (!imagine.request.id) return false;
+        if (!imagine.id) return false;
 
-        if (imagine.request.error_message) return false;
+        if (imagine.error_message) return false;
 
         return true;
       })(),
@@ -84,15 +84,15 @@ describe('Imagine Suite', () => {
 
     const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'Cat with a Sword' } });
 
-    const imagineResult = await sdk.getImagineById({ id: imagine.request.id });
+    const imagineResult = await sdk.getImagineById({ id: imagine.id });
 
     expect(
       (() => {
-        if (!imagineResult.request.id) return false;
+        if (!imagineResult.id) return false;
 
-        if (imagineResult.request.error_message) return false;
+        if (imagineResult.error_message) return false;
 
-        if (imagineResult.request.id !== imagine.request.id) return false;
+        if (imagineResult.id !== imagine.id) return false;
 
         return true;
       })(),
@@ -106,15 +106,15 @@ describe('Imagine Suite', () => {
 
     const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'Cat with a Sword' } });
 
-    const imagineResult = await sdk.getImagineByObfuscatedId({ obfuscated_id: imagine.request.obfuscated_id });
+    const imagineResult = await sdk.getImagineByObfuscatedId({ obfuscated_id: imagine.obfuscated_id });
 
     expect(
       (() => {
-        if (!imagineResult.request.id) return false;
+        if (!imagineResult.id) return false;
 
-        if (imagineResult.request.error_message) return false;
+        if (imagineResult.error_message) return false;
 
-        if (imagineResult.request.obfuscated_id !== imagine.request.obfuscated_id) return false;
+        if (imagineResult.obfuscated_id !== imagine.obfuscated_id) return false;
 
         return true;
       })(),
@@ -252,10 +252,10 @@ describe('Imagine Suite', () => {
 
     const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'Dog with a Sword' } });
 
-    const imagineHistory = await sdk.getImagineHistory({ imagine_id: imagine.request.id });
+    const imagineHistory = await sdk.getImagineHistory({ imagine_id: imagine.id });
 
     expect(imagineHistory.totalCount === 1).toBe(true);
-    expect(imagineHistory.data[0]?.id === imagine.request.id).toBe(true);
+    expect(imagineHistory.data[0]?.id === imagine.id).toBe(true);
   });
 
   it.concurrent('Should create an new imagine and find him on imagine history by Title', async () => {
@@ -265,11 +265,11 @@ describe('Imagine Suite', () => {
 
     const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'Dog with a Sword' } });
 
-    const imagineHistory = await sdk.getImagineHistory({ query: imagine.request.title });
+    const imagineHistory = await sdk.getImagineHistory({ query: imagine.title });
 
     expect(imagineHistory.totalCount >= 1).toBe(true);
-    expect(imagineHistory.data[0]?.id === imagine.request.id).toBe(true);
-    expect(imagineHistory.data[0]?.title === imagine.request.title).toBe(true);
+    expect(imagineHistory.data[0]?.id === imagine.id).toBe(true);
+    expect(imagineHistory.data[0]?.title === imagine.title).toBe(true);
   });
 
   it.concurrent('Should create an new imagine and find him on imagine history by Prompt', async () => {
@@ -282,7 +282,7 @@ describe('Imagine Suite', () => {
     const imagineHistory = await sdk.getImagineHistory({ query: 'prompt filter' });
 
     expect(imagineHistory.totalCount >= 1).toBe(true);
-    expect(imagineHistory.data[0]?.generator_data.prompt === imagine.request.generator_data.prompt).toBe(true);
+    expect(imagineHistory.data[0]?.generator_data.prompt === imagine.generator_data.prompt).toBe(true);
   });
 
   it.concurrent('Should create an new imagine and cancel him', async () => {
@@ -295,12 +295,12 @@ describe('Imagine Suite', () => {
       generator_data: { prompt: 'Dog with a Sword' },
     });
 
-    const cancelRequest = await sdk.cancelImagine({ id: generateImagine.request.id });
+    const cancelRequest = await sdk.cancelImagine({ id: generateImagine.id });
 
-    const imagine = await sdk.getImagineById({ id: generateImagine.request.id });
+    const imagine = await sdk.getImagineById({ id: generateImagine.id });
 
     expect(cancelRequest.success).toBe(true);
-    expect(imagine.request.status === 'abort').toBe(true);
+    expect(imagine.status === 'abort').toBe(true);
   });
 
   // NOTE: the tests below should not be executed concurrent since they can affect the other ones
@@ -321,12 +321,12 @@ describe('Imagine Suite', () => {
 
     const cancelAllRequest = await sdk.cancelAllPendingImagines();
 
-    const firstImagine = await sdk.getImagineById({ id: firstGenerateImagine.request.id });
-    const secondImagine = await sdk.getImagineById({ id: secondGenerateImagine.request.id });
+    const firstImagine = await sdk.getImagineById({ id: firstGenerateImagine.id });
+    const secondImagine = await sdk.getImagineById({ id: secondGenerateImagine.id });
 
     expect(cancelAllRequest.success).toBe(true);
-    expect(firstImagine.request.status === 'abort').toBe(true);
-    expect(secondImagine.request.status === 'abort').toBe(true);
+    expect(firstImagine.status === 'abort').toBe(true);
+    expect(secondImagine.status === 'abort').toBe(true);
   });
 
   it('Should create an new imagine and delete him', async () => {
@@ -343,17 +343,17 @@ describe('Imagine Suite', () => {
     let completed = false;
 
     while (!completed) {
-      const imagine = await sdk.getImagineById({ id: generateImagine.request.id });
+      const imagine = await sdk.getImagineById({ id: generateImagine.id });
 
-      if (imagine.request.status === 'complete') completed = true;
+      if (imagine.status === 'complete') completed = true;
 
       await delay(5000);
     }
 
-    const deleteRequest = await sdk.deleteImagine({ id: generateImagine.request.id });
+    const deleteRequest = await sdk.deleteImagine({ id: generateImagine.id });
 
     expect(Boolean(deleteRequest.success)).toBe(true);
-    expect(String(generateImagine.request.id) === String(deleteRequest.id));
+    expect(String(generateImagine.id) === String(deleteRequest.id));
   });
 
   it.fails('Should fail when trying to retrieve an deleted imagine', async () => {
@@ -370,16 +370,16 @@ describe('Imagine Suite', () => {
     let completed = false;
 
     while (!completed) {
-      const imagine = await sdk.getImagineById({ id: generateImagine.request.id });
+      const imagine = await sdk.getImagineById({ id: generateImagine.id });
 
-      if (imagine.request.status === 'complete') completed = true;
+      if (imagine.status === 'complete') completed = true;
 
       await delay(5000);
     }
 
-    await sdk.deleteImagine({ id: generateImagine.request.id });
+    await sdk.deleteImagine({ id: generateImagine.id });
 
     // This should fail here
-    await sdk.getImagineById({ id: generateImagine.request.id });
+    await sdk.getImagineById({ id: generateImagine.id });
   });
 });

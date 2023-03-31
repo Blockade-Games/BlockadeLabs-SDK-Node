@@ -170,7 +170,9 @@ export class BlockadeLabsSdk {
         throw new InternalError(`${data.error}`);
       }
 
-      const responseValidator = generateImagineResponse.safeParse(data);
+      const responseValidator = data.request
+        ? generateImagineResponse.safeParse(data.request)
+        : generateImagineResponse.safeParse(data);
 
       if (responseValidator.success === false) {
         throw new InternalError(responseValidator.error.message);
@@ -200,7 +202,9 @@ export class BlockadeLabsSdk {
         throw new InternalError(`${data.error}`);
       }
 
-      const responseValidator = getImagineByIdResponse.safeParse(data);
+      const responseValidator = data.request
+        ? getImagineByIdResponse.safeParse(data.request)
+        : getImagineByIdResponse.safeParse(data);
 
       if (responseValidator.success === false) {
         throw new InternalError(responseValidator.error.message);
@@ -232,7 +236,9 @@ export class BlockadeLabsSdk {
         throw new InternalError(`${data.error}`);
       }
 
-      const responseValidator = getImagineByObfuscatedIdResponse.safeParse(data);
+      const responseValidator = data.request
+        ? getImagineByObfuscatedIdResponse.safeParse(data.request)
+        : getImagineByObfuscatedIdResponse.safeParse(data);
 
       if (responseValidator.success === false) {
         throw new InternalError(responseValidator.error.message);
