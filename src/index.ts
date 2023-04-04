@@ -1,4 +1,4 @@
-import { AxiosInstance } from 'axios';
+import { AxiosError, AxiosInstance } from 'axios';
 import { z } from 'zod';
 import FormData from 'form-data';
 
@@ -33,7 +33,7 @@ export class BlockadeLabsSdk {
 
   constructor({ api_key, env }: BlockadeLabsSdkConstructor) {
     this.api_key = api_key;
-    this.api = env === 'production' ? prodApi : stagingApi;
+    this.api = env === 'staging' ? stagingApi : prodApi;
   }
 
   async getSkyboxStyles(): Promise<z.infer<typeof getSkyboxStylesResponse>> {
@@ -49,6 +49,8 @@ export class BlockadeLabsSdk {
       return responseValidator.data;
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
+
+      if (err instanceof AxiosError) throw new InternalError(err.message);
 
       throw new InternalError('Unexpected error retrieving skybox styles');
     }
@@ -92,6 +94,8 @@ export class BlockadeLabsSdk {
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
 
+      if (err instanceof AxiosError) throw new InternalError(err.message);
+
       throw new InternalError('Unexpected error generating new skybox');
     }
   }
@@ -109,6 +113,8 @@ export class BlockadeLabsSdk {
       return responseValidator.data;
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
+
+      if (err instanceof AxiosError) throw new InternalError(err.message);
 
       throw new InternalError('Unexpected error retrieving generators');
     }
@@ -182,6 +188,8 @@ export class BlockadeLabsSdk {
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
 
+      if (err instanceof AxiosError) throw new InternalError(err.message);
+
       throw new InternalError('Unexpected error generating new imagine');
     }
   }
@@ -213,6 +221,8 @@ export class BlockadeLabsSdk {
       return responseValidator.data;
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
+
+      if (err instanceof AxiosError) throw new InternalError(err.message);
 
       throw new InternalError(`Unexpected error retrieving imagine: ${input.id}`);
     }
@@ -247,6 +257,8 @@ export class BlockadeLabsSdk {
       return responseValidator.data;
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
+
+      if (err instanceof AxiosError) throw new InternalError(err.message);
 
       throw new InternalError(`Unexpected error retrieving imagine: ${input.obfuscated_id}`);
     }
@@ -288,6 +300,8 @@ export class BlockadeLabsSdk {
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
 
+      if (err instanceof AxiosError) throw new InternalError(err.message);
+
       throw new InternalError('Unexpected error retrieving imagine history');
     }
   }
@@ -318,6 +332,8 @@ export class BlockadeLabsSdk {
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
 
+      if (err instanceof AxiosError) throw new InternalError(err.message);
+
       throw new InternalError('Unexpected error retrieving imagine history');
     }
   }
@@ -335,6 +351,8 @@ export class BlockadeLabsSdk {
       return responseValidator.data;
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
+
+      if (err instanceof AxiosError) throw new InternalError(err.message);
 
       throw new InternalError('Unexpected error retrieving imagine history');
     }
@@ -365,6 +383,8 @@ export class BlockadeLabsSdk {
       return responseValidator.data;
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
+
+      if (err instanceof AxiosError) throw new InternalError(err.message);
 
       throw new InternalError('Unexpected error retrieving imagine history');
     }

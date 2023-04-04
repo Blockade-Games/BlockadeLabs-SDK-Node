@@ -6,6 +6,7 @@ describe('Imagine Suite', () => {
   it.concurrent('Should retrieve Generators', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const styles = await sdk.getGenerators();
@@ -16,6 +17,7 @@ describe('Imagine Suite', () => {
   it.concurrent('Should create an new imagine', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'Cat with a Sword' } });
@@ -34,6 +36,7 @@ describe('Imagine Suite', () => {
   it.concurrent('Should create an new imagine with an Buffer as init_image', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const buffer = await readFileAsBuffer('./mocks/thumb_cat_sword.png');
@@ -57,6 +60,7 @@ describe('Imagine Suite', () => {
   it.concurrent('Should create an new imagine with an Uint8Array as init_image', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const binary = await readImageAsUint8Array('./mocks/thumb_cat_sword.png');
@@ -80,6 +84,7 @@ describe('Imagine Suite', () => {
   it.concurrent('Should create an new imagine and get him by ID', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'Cat with a Sword' } });
@@ -102,6 +107,7 @@ describe('Imagine Suite', () => {
   it.concurrent('Should create an new imagine and get him by Obfuscated ID', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'Cat with a Sword' } });
@@ -124,6 +130,7 @@ describe('Imagine Suite', () => {
   it.concurrent('Should retrieve Imagine History', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const imagineHistory = await sdk.getImagineHistory();
@@ -135,6 +142,7 @@ describe('Imagine Suite', () => {
   it.concurrent('Should retrieve Imagine History with limit 1', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const imagineHistory = await sdk.getImagineHistory({ limit: 1 });
@@ -147,6 +155,7 @@ describe('Imagine Suite', () => {
   it.concurrent('Should retrieve Imagine History without the first imagine', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const fistImagineInHistory = (await sdk.getImagineHistory({ limit: 1 })).data[0];
@@ -171,6 +180,7 @@ describe('Imagine Suite', () => {
   it.concurrent('Should get only completed imagines in history', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const imagineHistory = await sdk.getImagineHistory({ status: 'complete' });
@@ -191,6 +201,7 @@ describe('Imagine Suite', () => {
   it.concurrent('Should get imagine history in ASC and DESC order', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const imagineHistoryAsc = await sdk.getImagineHistory({ order: 'ASC' });
@@ -228,6 +239,7 @@ describe('Imagine Suite', () => {
   it.concurrent('Should get only imagines with generator stable-skybox in history', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const imagineHistory = await sdk.getImagineHistory({ generator: 'stable-skybox' });
@@ -248,6 +260,7 @@ describe('Imagine Suite', () => {
   it.concurrent('Should create an new imagine and find him on imagine history by ID', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'Dog with a Sword' } });
@@ -261,6 +274,7 @@ describe('Imagine Suite', () => {
   it.concurrent('Should create an new imagine and find him on imagine history by Title', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'Dog with a Sword' } });
@@ -275,6 +289,7 @@ describe('Imagine Suite', () => {
   it.concurrent('Should create an new imagine and find him on imagine history by Prompt', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'prompt filter' } });
@@ -288,6 +303,7 @@ describe('Imagine Suite', () => {
   it.concurrent('Should create an new imagine and cancel him', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const generateImagine = await sdk.generateImagine({
@@ -307,6 +323,7 @@ describe('Imagine Suite', () => {
   it('Should create imagine requests and cancel all', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const firstGenerateImagine = await sdk.generateImagine({
@@ -332,6 +349,7 @@ describe('Imagine Suite', () => {
   it('Should create an new imagine and delete him', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const generateImagine = await sdk.generateImagine({
@@ -359,6 +377,7 @@ describe('Imagine Suite', () => {
   it.fails('Should fail when trying to retrieve an deleted imagine', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const generateImagine = await sdk.generateImagine({

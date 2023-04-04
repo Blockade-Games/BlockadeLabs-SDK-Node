@@ -35,7 +35,7 @@ const sdk = BlockadeLabsSdk({
 ```ts
 import { BlockadeLabsSdk } from '@blockadelabs/sdk';
 
-const sdk = BlockadeLabsSdk({
+const sdk = new BlockadeLabsSdk({
   api_key: YOUR_API_KEY,
 });
 
@@ -47,7 +47,7 @@ const styles = await sdk.getSkyboxStyles();
 ```ts
 import { BlockadeLabsSdk } from '@blockadelabs/sdk';
 
-const sdk = BlockadeLabsSdk({
+const sdk = new BlockadeLabsSdk({
   api_key: YOUR_API_KEY,
 });
 
@@ -63,7 +63,7 @@ const generation = await sdk.generateSkybox({
 ```ts
 import { BlockadeLabsSdk } from '@blockadelabs/sdk';
 
-const sdk = BlockadeLabsSdk({
+const sdk = new BlockadeLabsSdk({
   api_key: YOUR_API_KEY,
 });
 
@@ -75,7 +75,7 @@ const generators = await sdk.getGenerators();
 ```ts
 import { BlockadeLabsSdk } from '@blockadelabs/sdk';
 
-const sdk = BlockadeLabsSdk({
+const sdk = new BlockadeLabsSdk({
   api_key: YOUR_API_KEY,
 });
 
@@ -105,6 +105,10 @@ const generation = await sdk.generateImagine({
 // init_image param node environment example
 import * as fs from 'fs';
 import { BlockadeLabsSdk } from '@blockadelabs/sdk';
+
+const sdk = new BlockadeLabsSdk({
+  api_key: YOUR_API_KEY,
+});
 
 const readFileAsBuffer = (filePath: string): Promise<Buffer> => {
   return new Promise((resolve, reject) => {
@@ -183,7 +187,7 @@ export default Component;
 ```ts
 import { BlockadeLabsSdk } from '@blockadelabs/sdk';
 
-const sdk = BlockadeLabsSdk({
+const sdk = new BlockadeLabsSdk({
   api_key: YOUR_API_KEY,
 });
 
@@ -204,7 +208,7 @@ const imagineResult = await sdk.getImagineById({
 ```ts
 import { BlockadeLabsSdk } from '@blockadelabs/sdk';
 
-const sdk = BlockadeLabsSdk({
+const sdk = new BlockadeLabsSdk({
   api_key: YOUR_API_KEY,
 });
 
@@ -225,7 +229,7 @@ const imagineResult = await sdk.getImagineByObfuscatedId({
 ```ts
 import { BlockadeLabsSdk } from '@blockadelabs/sdk';
 
-const sdk = BlockadeLabsSdk({
+const sdk = new BlockadeLabsSdk({
   api_key: YOUR_API_KEY,
 });
 
@@ -247,7 +251,7 @@ const imagineHistoryWithFilters = await sdk.getImagineHistory({
 ```ts
 import { BlockadeLabsSdk } from '@blockadelabs/sdk';
 
-const sdk = BlockadeLabsSdk({
+const sdk = new BlockadeLabsSdk({
   api_key: YOUR_API_KEY,
 });
 
@@ -266,7 +270,7 @@ await sdk.cancelImagine({
 ```ts
 import { BlockadeLabsSdk } from '@blockadelabs/sdk';
 
-const sdk = BlockadeLabsSdk({
+const sdk = new BlockadeLabsSdk({
   api_key: YOUR_API_KEY,
 });
 
@@ -278,7 +282,7 @@ await sdk.cancelAllPendingImagines();
 ```ts
 import { BlockadeLabsSdk } from '@blockadelabs/sdk';
 
-const sdk = BlockadeLabsSdk({
+const sdk = new BlockadeLabsSdk({
   api_key: YOUR_API_KEY,
 });
 

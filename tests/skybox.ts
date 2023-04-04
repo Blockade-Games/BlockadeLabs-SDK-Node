@@ -6,6 +6,7 @@ describe.concurrent('Skybox Suite', () => {
   it('Should retrieve Skybox Styles', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const styles = await sdk.getSkyboxStyles();
@@ -16,6 +17,7 @@ describe.concurrent('Skybox Suite', () => {
   it('Should create an new Skybox and check endpoint response', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
+      env: 'staging',
     });
 
     const skybox = await sdk.generateSkybox({
