@@ -64,13 +64,21 @@ export class BlockadeLabsSdk {
         throw new InternalError(requestValidator.error.message);
       }
 
-      const { prompt, skybox_style_id, webhook_url } = requestValidator.data;
+      const { prompt, skybox_style_id, remix_id, remix_obfuscated_id, webhook_url } = requestValidator.data;
 
       const formData = new FormData();
 
       formData.append('api_key', this.api_key);
       formData.append('prompt', prompt);
       formData.append('skybox_style_id', skybox_style_id);
+
+      if (remix_id) {
+        formData.append('remix_imagine_id', remix_id);
+      }
+
+      if (remix_obfuscated_id) {
+        formData.append('remix_imagine_obfuscated_id', remix_obfuscated_id);
+      }
 
       if (webhook_url) {
         formData.append('webhook_url', webhook_url);

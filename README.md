@@ -58,6 +58,23 @@ const generation = await sdk.generateSkybox({
 });
 ```
 
+#### Remix Skybox
+
+```ts
+import { BlockadeLabsSdk } from '@blockadelabs/sdk';
+
+const sdk = new BlockadeLabsSdk({
+  api_key: YOUR_API_KEY,
+});
+
+const generation = await sdk.generateSkybox({
+  prompt: 'PROMPT_GOES_HERE', // Required
+  skybox_style_id: 2, // Required
+  remix_id: 1, // OR remix_obfuscated_id
+  webhook_url: 'YOUR_WEBHOOK_URL', // Optional
+});
+```
+
 #### getGenerators
 
 ```ts
