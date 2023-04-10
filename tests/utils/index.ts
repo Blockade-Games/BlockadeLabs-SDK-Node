@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export const env = {
-  api_key: process.env.API_KEY || '',
+  api_key: process.env.INTERNAL_TEST_BLOCKADE_SDK_API_KEY || '',
 };
 
 export const readFileAsBuffer = (filePath: string): Promise<Buffer> => {
