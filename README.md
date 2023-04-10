@@ -24,7 +24,6 @@ import { BlockadeLabsSdk } from '@blockadelabs/sdk';
 
 const sdk = new BlockadeLabsSdk({
   api_key: YOUR_API_KEY, // REQUIRED
-  env: 'staging', // Optional, 'production' | 'staging'
 });
 ```
 

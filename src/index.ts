@@ -1,3 +1,4 @@
+import * as dotenv from 'dotenv';
 import { AxiosError, AxiosInstance } from 'axios';
 import { z } from 'zod';
 import FormData from 'form-data';
@@ -22,31 +23,26 @@ import {
 } from '@/schemas/imagine';
 import { InternalError } from '@/utils/error';
 
+dotenv.config();
+
 type BlockadeLabsSdkConstructor = {
   api_key: string;
-  env?: 'production' | 'staging';
 };
 
 export class BlockadeLabsSdk {
   private api_key: string;
-  private api: AxiosInstance;
+  private api: AxiosInstance = prodApi;
 
-  constructor({ api_key, env }: BlockadeLabsSdkConstructor) {
+  constructor({ api_key }: BlockadeLabsSdkConstructor) {
     this.api_key = api_key;
-    this.api = env === 'staging' ? stagingApi : prodApi;
+    this.api = process.env.INTERNAL_TEST_BLOCKADE_SDK_API_KEY ? stagingApi : prodApi;
   }
 
   async getSkyboxStyles(): Promise<z.infer<typeof getSkyboxStylesResponse>> {
     try {
       const { data } = await this.api.get(`/skybox/styles?api_key=${this.api_key}`);
 
-      const responseValidator = getSkyboxStylesResponse.safeParse(data);
-
-      if (responseValidator.success === false) {
-        throw new InternalError(responseValidator.error.message);
-      }
-
-      return responseValidator.data;
+      return data;
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
 
@@ -92,13 +88,7 @@ export class BlockadeLabsSdk {
         throw new InternalError(`${data.error}`);
       }
 
-      const responseValidator = generateSkyboxResponse.safeParse(data);
-
-      if (responseValidator.success === false) {
-        throw new InternalError(responseValidator.error.message);
-      }
-
-      return responseValidator.data;
+      return data;
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
 
@@ -112,13 +102,7 @@ export class BlockadeLabsSdk {
     try {
       const { data } = await this.api.get(`/generators?api_key=${this.api_key}`);
 
-      const responseValidator = getGeneratorsResponse.safeParse(data);
-
-      if (responseValidator.success === false) {
-        throw new InternalError(responseValidator.error.message);
-      }
-
-      return responseValidator.data;
+      return data;
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
 
@@ -184,15 +168,7 @@ export class BlockadeLabsSdk {
         throw new InternalError(`${data.error}`);
       }
 
-      const responseValidator = data.request
-        ? generateImagineResponse.safeParse(data.request)
-        : generateImagineResponse.safeParse(data);
-
-      if (responseValidator.success === false) {
-        throw new InternalError(responseValidator.error.message);
-      }
-
-      return responseValidator.data;
+      return data.request ? data.request : data;
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
 
@@ -218,15 +194,7 @@ export class BlockadeLabsSdk {
         throw new InternalError(`${data.error}`);
       }
 
-      const responseValidator = data.request
-        ? getImagineByIdResponse.safeParse(data.request)
-        : getImagineByIdResponse.safeParse(data);
-
-      if (responseValidator.success === false) {
-        throw new InternalError(responseValidator.error.message);
-      }
-
-      return responseValidator.data;
+      return data.request ? data.request : data;
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
 
@@ -254,15 +222,7 @@ export class BlockadeLabsSdk {
         throw new InternalError(`${data.error}`);
       }
 
-      const responseValidator = data.request
-        ? getImagineByObfuscatedIdResponse.safeParse(data.request)
-        : getImagineByObfuscatedIdResponse.safeParse(data);
-
-      if (responseValidator.success === false) {
-        throw new InternalError(responseValidator.error.message);
-      }
-
-      return responseValidator.data;
+      return data.request ? data.request : data;
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
 
@@ -298,13 +258,7 @@ export class BlockadeLabsSdk {
 
       const { data } = await this.api.get(url);
 
-      const responseValidator = getImagineHistoryResponse.safeParse(data);
-
-      if (responseValidator.success === false) {
-        throw new InternalError(responseValidator.error.message);
-      }
-
-      return responseValidator.data;
+      return data;
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
 
@@ -330,13 +284,7 @@ export class BlockadeLabsSdk {
         throw new InternalError(`${data.error}`);
       }
 
-      const responseValidator = cancelImagineResponse.safeParse(data);
-
-      if (responseValidator.success === false) {
-        throw new InternalError(responseValidator.error.message);
-      }
-
-      return responseValidator.data;
+      return data;
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
 
@@ -350,13 +298,7 @@ export class BlockadeLabsSdk {
     try {
       const { data } = await this.api.delete(`/imagine/requests/pending?api_key=${this.api_key}`);
 
-      const responseValidator = cancelAllPendingImaginesResponse.safeParse(data);
-
-      if (responseValidator.success === false) {
-        throw new InternalError(responseValidator.error.message);
-      }
-
-      return responseValidator.data;
+      return data;
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
 
@@ -382,13 +324,7 @@ export class BlockadeLabsSdk {
         throw new InternalError(`${data.error}`);
       }
 
-      const responseValidator = deleteImagineResponse.safeParse(data);
-
-      if (responseValidator.success === false) {
-        throw new InternalError(responseValidator.error.message);
-      }
-
-      return responseValidator.data;
+      return data;
     } catch (err) {
       if (err instanceof InternalError) throw new InternalError(err.message);
 
