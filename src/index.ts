@@ -247,7 +247,9 @@ export class BlockadeLabsSdk {
           const searchParams = new URLSearchParams();
 
           Object.entries(requestValidator.data).map(([key, value]) => {
-            searchParams.append(key, String(value));
+            if (value) {
+              searchParams.append(key, String(value));
+            }
           });
 
           return `/imagine/myRequests?api_key=${this.api_key}&${searchParams.toString()}`;
