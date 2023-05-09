@@ -1,9 +1,8 @@
-import * as dotenv from 'dotenv';
 import { AxiosError, AxiosInstance } from 'axios';
 import { z } from 'zod';
 import FormData from 'form-data';
 
-import { prodApi, stagingApi } from '@/services/api';
+import { prodApi } from '@/services/api';
 import { getSkyboxStylesResponse, generateSkyboxRequest, generateSkyboxResponse } from '@/schemas/skybox';
 import {
   cancelAllPendingImaginesResponse,
@@ -23,8 +22,6 @@ import {
 } from '@/schemas/imagine';
 import { InternalError } from '@/utils/error';
 
-dotenv.config();
-
 type BlockadeLabsSdkConstructor = {
   api_key: string;
 };
@@ -35,7 +32,6 @@ export class BlockadeLabsSdk {
 
   constructor({ api_key }: BlockadeLabsSdkConstructor) {
     this.api_key = api_key;
-    this.api = process.env.INTERNAL_TEST_BLOCKADE_SDK_API_KEY ? stagingApi : prodApi;
   }
 
   async getSkyboxStyles(): Promise<z.infer<typeof getSkyboxStylesResponse>> {
