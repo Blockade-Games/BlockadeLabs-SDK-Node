@@ -56,25 +56,70 @@ export class BlockadeLabsSdk {
         throw new InternalError(requestValidator.error.message);
       }
 
-      const { prompt, skybox_style_id, remix_id, remix_obfuscated_id, webhook_url } = requestValidator.data;
+      const {
+        prompt,
+        negative_text,
+        seed,
+        skybox_style_id,
+        remix_id,
+        remix_obfuscated_id,
+        control_image,
+        control_model,
+        return_depth,
+        webhook_url,
+      } = requestValidator.data;
 
       const formData = new FormData();
 
       formData.append('api_key', this.api_key);
       formData.append('prompt', prompt);
-      formData.append('skybox_style_id', skybox_style_id);
 
-      if (remix_id) {
-        formData.append('remix_imagine_id', remix_id);
+      if (skybox_style_id) formData.append('skybox_style_id', skybox_style_id);
+
+      if (negative_text) formData.append('negative_text', negative_text);
+
+      if (seed) formData.append('seed', seed);
+
+      if (remix_id) formData.append('remix_imagine_id', remix_id);
+
+      if (remix_obfuscated_id) formData.append('remix_imagine_obfuscated_id', remix_obfuscated_id);
+
+      if (control_image) {
+        if (typeof control_image === 'string') {
+          formData.append('control_image', control_image);
+        }
+
+        if (typeof Buffer !== 'undefined' && Buffer.isBuffer(control_image)) {
+          formData.append('control_image', control_image, {
+            filename: 'control_image',
+            contentType: 'application/octet-stream',
+          });
+        }
+
+        if (control_image instanceof Uint8Array) {
+          // Check if it's an browser env
+          if (typeof window !== 'undefined') {
+            const blob = new Blob([control_image], { type: 'application/octet-stream' });
+            formData.append('control_image', blob, 'control_image');
+          } else {
+            const buffer = Buffer.from(control_image);
+            formData.append('control_image', buffer, {
+              filename: 'control_image',
+              contentType: 'application/octet-stream',
+            });
+          }
+        }
+
+        if (typeof window !== 'undefined' && control_image instanceof Blob) {
+          formData.append('control_image', control_image, 'control_image');
+        }
       }
 
-      if (remix_obfuscated_id) {
-        formData.append('remix_imagine_obfuscated_id', remix_obfuscated_id);
-      }
+      if (control_model) formData.append('control_model', control_model);
 
-      if (webhook_url) {
-        formData.append('webhook_url', webhook_url);
-      }
+      if (return_depth) formData.append('return_depth', return_depth);
+
+      if (webhook_url) formData.append('webhook_url', webhook_url);
 
       const { data } = await this.api.post('/skybox', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
