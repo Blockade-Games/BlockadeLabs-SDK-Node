@@ -1,76 +1,38 @@
 import { z } from 'zod';
 
-export const getGeneratorsResponse = z.array(
-  z.object({
-    id: z.number(),
-    generator: z.string(),
-    name: z.string(),
-    label: z.string(),
-    // NOTE: generators params can be changed all the time, so I'm leaving they as any here.
-    params: z.record(z.string(), z.any()),
-    sort_order: z.number().nullable(),
-  }),
-);
-
-export const generateImagineRequest = z.object({
-  generator: z.string(),
-  // NOTE: generators params can be changed all the time, so I'm leaving they as any here.
-  // You can see all the generators params for each generator calling getGenerators.
-  generator_data: z.record(z.string(), z.any()),
-  webhook_url: z.string().optional(),
-});
-
-export const generateImagineResponse = z.object({
-  id: z.number(),
-  status: z.string(),
-  queue_position: z.number(),
-  file_url: z.string(),
-  thumb_url: z.string(),
-  title: z.string(),
-  user_id: z.number(),
-  username: z.string(),
-  // TODO: find this type here
-  error_message: z.null().or(z.any()),
-  obfuscated_id: z.string(),
-  pusher_channel: z.string(),
-  pusher_event: z.string(),
-  created_at: z.string().or(z.date()),
-  updated_at: z.string().or(z.date()),
-  type: z.string(),
-  generator: z.string(),
-  // NOTE: generators params can be changed all the time, so I'm leaving they as any here.
-  // You can see all the generators params for each generator calling getGenerators.
-  generator_data: z.record(z.string(), z.any()),
-});
-
 export const getImagineByIdRequest = z.object({
   id: z.string().or(z.number()),
 });
 
 export const getImagineByIdResponse = z.object({
   id: z.number(),
-  status: z.string(),
-  queue_position: z.number(),
-  file_url: z.string(),
-  thumb_url: z.string(),
-  title: z.string(),
+  obfuscated_id: z.string(),
   user_id: z.number(),
   username: z.string(),
-  // TODO: find this type here
-  error_message: z.null().or(z.any()),
-  obfuscated_id: z.string(),
+
+  status: z.string(),
+  queue_position: z.number(),
   pusher_channel: z.string(),
   pusher_event: z.string(),
+  // TODO: find this type here
+  error_message: z.null().or(z.any()),
+
+  type: z.string(),
+  title: z.string(),
+  prompt: z.string().optional(),
+  seed: z.number().optional(),
+  skybox_style_id: z.number().optional(),
+  skybox_style_name: z.string().optional(),
+
+  file_url: z.string(),
+  thumb_url: z.string(),
+  depth_map_url: z.string().optional(),
+
   created_at: z.string().or(z.date()),
   updated_at: z.string().or(z.date()),
   dispatched_at: z.string().or(z.date()),
   processing_at: z.string().or(z.date()),
   completed_at: z.string().or(z.date()),
-  type: z.string(),
-  generator: z.string(),
-  // NOTE: generators params can be changed all the time, so I'm leaving they as any here.
-  // You can see all the generators params for each generator calling getGenerators.
-  generator_data: z.record(z.string(), z.any()),
 });
 
 export const getImagineByObfuscatedIdRequest = z.object({
@@ -79,28 +41,33 @@ export const getImagineByObfuscatedIdRequest = z.object({
 
 export const getImagineByObfuscatedIdResponse = z.object({
   id: z.number(),
-  status: z.string(),
-  queue_position: z.number(),
-  file_url: z.string(),
-  thumb_url: z.string(),
-  title: z.string(),
+  obfuscated_id: z.string(),
   user_id: z.number(),
   username: z.string(),
-  // TODO: find this type here
-  error_message: z.null().or(z.any()),
-  obfuscated_id: z.string(),
+
+  status: z.string(),
+  queue_position: z.number(),
   pusher_channel: z.string(),
   pusher_event: z.string(),
+  // TODO: find this type here
+  error_message: z.null().or(z.any()),
+
+  type: z.string(),
+  title: z.string(),
+  prompt: z.string().optional(),
+  seed: z.number().optional(),
+  skybox_style_id: z.number().optional(),
+  skybox_style_name: z.string().optional(),
+
+  file_url: z.string(),
+  thumb_url: z.string(),
+  depth_map_url: z.string().optional(),
+
   created_at: z.string().or(z.date()),
   updated_at: z.string().or(z.date()),
   dispatched_at: z.string().or(z.date()),
   processing_at: z.string().or(z.date()),
   completed_at: z.string().or(z.date()),
-  type: z.string(),
-  generator: z.string(),
-  // NOTE: generators params can be changed all the time, so I'm leaving they as any here.
-  // You can see all the generators params for each generator calling getGenerators.
-  generator_data: z.record(z.string(), z.any()),
 });
 
 export const getImagineHistoryRequest = z
@@ -120,28 +87,32 @@ export const getImagineHistoryResponse = z.object({
   data: z.array(
     z.object({
       id: z.number(),
-      status: z.string(),
-      queue_position: z.number(),
-      file_url: z.string(),
-      thumb_url: z.string(),
-      title: z.string(),
+      obfuscated_id: z.string(),
       user_id: z.number(),
       username: z.string(),
-      // TODO: find this type here
-      error_message: z.null().or(z.any()),
-      obfuscated_id: z.string(),
+
+      status: z.string(),
+      queue_position: z.number(),
       pusher_channel: z.string(),
       pusher_event: z.string(),
+      error_message: z.null().or(z.any()),
+
+      type: z.string(),
+      title: z.string(),
+      prompt: z.string().optional(),
+      seed: z.number().optional(),
+      skybox_style_id: z.number().optional(),
+      skybox_style_name: z.string().optional(),
+
+      file_url: z.string(),
+      thumb_url: z.string(),
+      depth_map_url: z.string().optional(),
+
       created_at: z.string().or(z.date()),
       updated_at: z.string().or(z.date()),
       dispatched_at: z.string().or(z.date()),
       processing_at: z.string().or(z.date()),
       completed_at: z.string().or(z.date()),
-      type: z.string(),
-      generator: z.string(),
-      // NOTE: generators params can be changed all the time, so I'm leaving they as any here.
-      // You can see all the generators params for each generator calling getGenerators.
-      generator_data: z.record(z.string(), z.any()),
     }),
   ),
   totalCount: z.number(),

@@ -1,90 +1,19 @@
 import { describe, it, expect } from 'vitest';
 import { BlockadeLabsSdk } from '@/index';
-import { delay, env, readFileAsBuffer, readImageAsUint8Array } from './utils';
+import { delay, env } from './utils';
 
 describe('Imagine Suite', () => {
-  it.concurrent('Should retrieve Generators', async () => {
-    const sdk = new BlockadeLabsSdk({
-      api_key: env.api_key,
-    });
-
-    const styles = await sdk.getGenerators();
-
-    expect(Array.isArray(styles)).toBe(true);
-  });
-
-  it.concurrent('Should create an new imagine', async () => {
-    const sdk = new BlockadeLabsSdk({
-      api_key: env.api_key,
-    });
-
-    const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'Cat with a Sword' } });
-
-    expect(
-      (() => {
-        if (!imagine.id) return false;
-
-        if (imagine.error_message) return false;
-
-        return true;
-      })(),
-    ).toBe(true);
-  });
-
-  it.concurrent('Should create an new imagine with an Buffer as init_image', async () => {
-    const sdk = new BlockadeLabsSdk({
-      api_key: env.api_key,
-    });
-
-    const buffer = await readFileAsBuffer('./mocks/thumb_cat_sword.png');
-
-    const imagine = await sdk.generateImagine({
-      generator: 'stable',
-      generator_data: { prompt: 'Cat with a Sword', init_image: buffer },
-    });
-
-    expect(
-      (() => {
-        if (!imagine.id) return false;
-
-        if (imagine.error_message) return false;
-
-        return true;
-      })(),
-    ).toBe(true);
-  });
-
-  it.concurrent('Should create an new imagine with an Uint8Array as init_image', async () => {
-    const sdk = new BlockadeLabsSdk({
-      api_key: env.api_key,
-    });
-
-    const binary = await readImageAsUint8Array('./mocks/thumb_cat_sword.png');
-
-    const imagine = await sdk.generateImagine({
-      generator: 'stable',
-      generator_data: { prompt: 'Cat with a Sword', init_image: binary },
-    });
-
-    expect(
-      (() => {
-        if (!imagine.id) return false;
-
-        if (imagine.error_message) return false;
-
-        return true;
-      })(),
-    ).toBe(true);
-  });
-
   it.concurrent('Should create an new imagine and get him by ID', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
     });
 
-    const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'Cat with a Sword' } });
+    const skybox = await sdk.generateSkybox({
+      prompt: 'test',
+      skybox_style_id: 2,
+    });
 
-    const imagineResult = await sdk.getImagineById({ id: imagine.id });
+    const imagineResult = await sdk.getImagineById({ id: skybox.id });
 
     expect(
       (() => {
@@ -92,7 +21,7 @@ describe('Imagine Suite', () => {
 
         if (imagineResult.error_message) return false;
 
-        if (imagineResult.id !== imagine.id) return false;
+        if (imagineResult.id !== skybox.id) return false;
 
         return true;
       })(),
@@ -104,9 +33,12 @@ describe('Imagine Suite', () => {
       api_key: env.api_key,
     });
 
-    const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'Cat with a Sword' } });
+    const skybox = await sdk.generateSkybox({
+      prompt: 'test',
+      skybox_style_id: 2,
+    });
 
-    const imagineResult = await sdk.getImagineByObfuscatedId({ obfuscated_id: imagine.obfuscated_id });
+    const imagineResult = await sdk.getImagineByObfuscatedId({ obfuscated_id: skybox.obfuscated_id });
 
     expect(
       (() => {
@@ -114,7 +46,7 @@ describe('Imagine Suite', () => {
 
         if (imagineResult.error_message) return false;
 
-        if (imagineResult.obfuscated_id !== imagine.obfuscated_id) return false;
+        if (imagineResult.obfuscated_id !== skybox.obfuscated_id) return false;
 
         return true;
       })(),
@@ -225,32 +157,15 @@ describe('Imagine Suite', () => {
     ).toBe(true);
   });
 
-  it.concurrent('Should get only imagines with generator stable-skybox in history', async () => {
-    const sdk = new BlockadeLabsSdk({
-      api_key: env.api_key,
-    });
-
-    const imagineHistory = await sdk.getImagineHistory({ generator: 'stable-skybox' });
-
-    expect(
-      (() => {
-        for (const imagine of imagineHistory.data) {
-          if (imagine.generator === 'stable-skybox') continue;
-
-          return false;
-        }
-
-        return true;
-      })(),
-    ).toBe(true);
-  });
-
   it.concurrent('Should create an new imagine and find him on imagine history by ID', async () => {
     const sdk = new BlockadeLabsSdk({
       api_key: env.api_key,
     });
 
-    const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'Dog with a Sword' } });
+    const imagine = await sdk.generateSkybox({
+      prompt: 'test',
+      skybox_style_id: 2,
+    });
 
     const imagineHistory = await sdk.getImagineHistory({ imagine_id: imagine.id });
 
@@ -263,7 +178,10 @@ describe('Imagine Suite', () => {
       api_key: env.api_key,
     });
 
-    const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'Dog with a Sword' } });
+    const imagine = await sdk.generateSkybox({
+      prompt: 'test',
+      skybox_style_id: 2,
+    });
 
     const imagineHistory = await sdk.getImagineHistory({ query: imagine.title });
 
@@ -277,12 +195,15 @@ describe('Imagine Suite', () => {
       api_key: env.api_key,
     });
 
-    const imagine = await sdk.generateImagine({ generator: 'stable', generator_data: { prompt: 'prompt filter' } });
+    const imagine = await sdk.generateSkybox({
+      prompt: 'test',
+      skybox_style_id: 2,
+    });
 
-    const imagineHistory = await sdk.getImagineHistory({ query: 'prompt filter' });
+    const imagineHistory = await sdk.getImagineHistory({ query: imagine.prompt });
 
     expect(imagineHistory.totalCount >= 1).toBe(true);
-    expect(imagineHistory.data[0]?.generator_data.prompt === imagine.generator_data.prompt).toBe(true);
+    expect(imagineHistory.data[0]?.prompt === imagine.prompt).toBe(true);
   });
 
   it.concurrent('Should create an new imagine and cancel him', async () => {
@@ -290,9 +211,9 @@ describe('Imagine Suite', () => {
       api_key: env.api_key,
     });
 
-    const generateImagine = await sdk.generateImagine({
-      generator: 'stable',
-      generator_data: { prompt: 'Dog with a Sword' },
+    const generateImagine = await sdk.generateSkybox({
+      prompt: 'test',
+      skybox_style_id: 2,
     });
 
     const cancelRequest = await sdk.cancelImagine({ id: generateImagine.id });
@@ -309,14 +230,14 @@ describe('Imagine Suite', () => {
       api_key: env.api_key,
     });
 
-    const firstGenerateImagine = await sdk.generateImagine({
-      generator: 'stable',
-      generator_data: { prompt: 'Dog with a Sword' },
+    const firstGenerateImagine = await sdk.generateSkybox({
+      prompt: 'test',
+      skybox_style_id: 2,
     });
 
-    const secondGenerateImagine = await sdk.generateImagine({
-      generator: 'stable',
-      generator_data: { prompt: 'Cat with a Sword' },
+    const secondGenerateImagine = await sdk.generateSkybox({
+      prompt: 'test',
+      skybox_style_id: 2,
     });
 
     const cancelAllRequest = await sdk.cancelAllPendingImagines();
@@ -334,11 +255,10 @@ describe('Imagine Suite', () => {
       api_key: env.api_key,
     });
 
-    const generateImagine = await sdk.generateImagine({
-      generator: 'stable-cn',
-      generator_data: { prompt: 'test', animation_mode: 'skybox' },
+    const generateImagine = await sdk.generateSkybox({
+      prompt: 'test',
+      skybox_style_id: 2,
     });
-
     // wait for imagine to be completed
     let completed = false;
 
@@ -361,9 +281,9 @@ describe('Imagine Suite', () => {
       api_key: env.api_key,
     });
 
-    const generateImagine = await sdk.generateImagine({
-      generator: 'stable-cn',
-      generator_data: { prompt: 'test', animation_mode: 'skybox' },
+    const generateImagine = await sdk.generateSkybox({
+      prompt: 'test',
+      skybox_style_id: 2,
     });
 
     // wait for imagine to be completed

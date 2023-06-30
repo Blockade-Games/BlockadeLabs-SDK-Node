@@ -10,9 +10,6 @@ import {
   cancelImagineResponse,
   deleteImagineRequest,
   deleteImagineResponse,
-  generateImagineRequest,
-  generateImagineResponse,
-  getGeneratorsResponse,
   getImagineByIdRequest,
   getImagineByIdResponse,
   getImagineByObfuscatedIdRequest,
@@ -136,86 +133,6 @@ export class BlockadeLabsSdk {
       if (err instanceof AxiosError) throw new InternalError(err.message);
 
       throw new InternalError('Unexpected error generating new skybox');
-    }
-  }
-
-  async getGenerators(): Promise<z.infer<typeof getGeneratorsResponse>> {
-    try {
-      const { data } = await this.api.get(`/generators?api_key=${this.api_key}`);
-
-      return data;
-    } catch (err) {
-      if (err instanceof InternalError) throw new InternalError(err.message);
-
-      if (err instanceof AxiosError) throw new InternalError(err.message);
-
-      throw new InternalError('Unexpected error retrieving generators');
-    }
-  }
-
-  async generateImagine(
-    input: z.infer<typeof generateImagineRequest>,
-  ): Promise<z.infer<typeof generateImagineResponse>> {
-    try {
-      const requestValidator = generateImagineRequest.safeParse(input);
-
-      if (requestValidator.success === false) {
-        throw new InternalError(requestValidator.error.message);
-      }
-
-      const { generator, generator_data, webhook_url } = requestValidator.data;
-
-      const formData = new FormData();
-
-      formData.append('api_key', this.api_key);
-      formData.append('generator', generator);
-
-      if (webhook_url) {
-        formData.append('webhook_url', webhook_url);
-      }
-
-      Object.entries(generator_data).map(([key, value]) => {
-        if (typeof Buffer !== 'undefined' && Buffer.isBuffer(value)) {
-          formData.append(key, value, { filename: key, contentType: 'application/octet-stream' });
-          return;
-        }
-
-        if (value instanceof Uint8Array) {
-          // Check if it's an browser env
-          if (typeof window !== 'undefined') {
-            const blob = new Blob([value], { type: 'application/octet-stream' });
-            formData.append(key, blob, key);
-            return;
-          }
-
-          const buffer = Buffer.from(value);
-          formData.append(key, buffer, { filename: key, contentType: 'application/octet-stream' });
-          return;
-        }
-
-        if (typeof window !== 'undefined' && value instanceof Blob) {
-          formData.append(key, value, key);
-          return;
-        }
-
-        formData.append(key, value);
-      });
-
-      const { data } = await this.api.post('/imagine/requests', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-
-      if (data.error) {
-        throw new InternalError(`${data.error}`);
-      }
-
-      return data.request ? data.request : data;
-    } catch (err) {
-      if (err instanceof InternalError) throw new InternalError(err.message);
-
-      if (err instanceof AxiosError) throw new InternalError(err.message);
-
-      throw new InternalError('Unexpected error generating new imagine');
     }
   }
 
