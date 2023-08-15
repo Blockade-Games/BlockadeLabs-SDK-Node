@@ -13,6 +13,7 @@ export const getSkyboxStylesResponse = z.array(
 export const generateSkyboxRequest = z.object({
   prompt: z.string(),
   negative_text: z.string().optional(),
+  enhance_prompt: z.boolean().optional(),
   seed: z.number().optional(),
   skybox_style_id: z.number().optional(),
   remix_id: z.number().optional(),

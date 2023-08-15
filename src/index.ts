@@ -47,15 +47,12 @@ export class BlockadeLabsSdk {
 
   async generateSkybox(input: z.infer<typeof generateSkyboxRequest>): Promise<z.infer<typeof generateSkyboxResponse>> {
     try {
-      const requestValidator = generateSkyboxRequest.safeParse(input);
-
-      if (requestValidator.success === false) {
-        throw new InternalError(requestValidator.error.message);
-      }
+      const inputData = generateSkyboxRequest.passthrough().parse(input);
 
       const {
         prompt,
         negative_text,
+        enhance_prompt,
         seed,
         skybox_style_id,
         remix_id,
@@ -64,7 +61,10 @@ export class BlockadeLabsSdk {
         control_model,
         return_depth,
         webhook_url,
-      } = requestValidator.data;
+        ...rest
+      } = inputData;
+
+      const restData = Object.entries({ ...rest });
 
       const formData = new FormData();
 
@@ -74,6 +74,8 @@ export class BlockadeLabsSdk {
       if (skybox_style_id) formData.append('skybox_style_id', skybox_style_id);
 
       if (negative_text) formData.append('negative_text', negative_text);
+
+      if (enhance_prompt) formData.append('enhance_prompt', enhance_prompt);
 
       if (seed) formData.append('seed', seed);
 
@@ -117,6 +119,10 @@ export class BlockadeLabsSdk {
       if (return_depth) formData.append('return_depth', return_depth);
 
       if (webhook_url) formData.append('webhook_url', webhook_url);
+
+      restData.map(([key, value]) => {
+        formData.append(key, value);
+      });
 
       const { data } = await this.api.post('/skybox', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
