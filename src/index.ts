@@ -75,7 +75,7 @@ export class BlockadeLabsSdk {
 
       if (negative_text) formData.append('negative_text', negative_text);
 
-      if (enhance_prompt) formData.append('enhance_prompt', enhance_prompt);
+      if (enhance_prompt) formData.append('enhance_prompt', String(enhance_prompt));
 
       if (seed) formData.append('seed', seed);
 
@@ -121,7 +121,7 @@ export class BlockadeLabsSdk {
       if (webhook_url) formData.append('webhook_url', webhook_url);
 
       restData.map(([key, value]) => {
-        formData.append(key, value);
+        formData.append(key, String(value));
       });
 
       const { data } = await this.api.post('/skybox', formData, {
