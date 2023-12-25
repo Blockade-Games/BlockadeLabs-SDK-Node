@@ -83,11 +83,10 @@ const sdk = new BlockadeLabsSdk({
   api_key: YOUR_API_KEY,
 });
 
-const imagine = await sdk.generateImagine({
-  generator: 'stable',
-  generator_data: {
-    prompt: 'PROMPT_GOES_HERE',
-  },
+const imagine = await sdk.generateSkybox({
+  prompt: 'PROMPT_GOES_HERE', // Required
+  skybox_style_id: 2, // Required
+  webhook_url: 'YOUR_WEBHOOK_URL', // Optional
 });
 
 const imagineResult = await sdk.getImagineById({
@@ -104,11 +103,10 @@ const sdk = new BlockadeLabsSdk({
   api_key: YOUR_API_KEY,
 });
 
-const imagine = await sdk.generateImagine({
-  generator: 'stable',
-  generator_data: {
-    prompt: 'PROMPT_GOES_HERE',
-  },
+const imagine = await sdk.generateSkybox({
+  prompt: 'PROMPT_GOES_HERE', // Required
+  skybox_style_id: 2, // Required
+  webhook_url: 'YOUR_WEBHOOK_URL', // Optional
 });
 
 const imagineResult = await sdk.getImagineByObfuscatedId({
@@ -147,13 +145,14 @@ const sdk = new BlockadeLabsSdk({
   api_key: YOUR_API_KEY,
 });
 
-const generateImagine = await sdk.generateImagine({
-  generator: 'stable',
-  generator_data: { prompt: 'PROMPT_GOES_HERE' },
+const imagine = await sdk.generateSkybox({
+  prompt: 'PROMPT_GOES_HERE', // Required
+  skybox_style_id: 2, // Required
+  webhook_url: 'YOUR_WEBHOOK_URL', // Optional
 });
 
 await sdk.cancelImagine({
-  id: generateImagine.id, // REQUIRED
+  id: imagine.id, // REQUIRED
 });
 ```
 
